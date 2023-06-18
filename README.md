@@ -1,10 +1,20 @@
 <!-- TITLE -->
+<h2 align="center">A JavaFX Application that converts text into IinkleWriter JSON</h2>
+<div align="center">
+
+[![Download](https://img.shields.io/github/downloads/BluestoneDE/InkleWriterImporter/total.svg?style=for-the-badge&label=download&color=green&logo=DocuSign&logoColor=white)][download-link]
+[![Issues](https://img.shields.io/github/issues-raw/BluestoneDE/InkleWriterImporter?color=orange&logo=windows%20terminal&style=for-the-badge)][issues]
+[![Creator](https://img.shields.io/github/followers/BluestoneDE?color=blue&label=_Bluestone_&logo=github&style=for-the-badge)](https://github.com/BluestoneDE)
+
 [![Download](https://repository-images.githubusercontent.com/655404198/2f1a7b2c-4a2d-4efe-8bcd-9a2dc01ede06)][download-link]
-<h2 align="center">A JavaFX Application that converts plain text (from .ink files) into IinkleWriter JSON</h2>
+
+</div>
 
 ### 📥 Installation
 1. Download the latest version on [GitHub][download-link].
 2. Run the **InkleWriterImporter.jar** file with Java (version 8 or higher).
+
+❗ Please report any problems in the [issues tab][issues]. ❗
 
 ### ❔ How to use
 1. Insert your Text or drag and drop the file into the application
@@ -25,4 +35,5 @@
 
 <!-- LINKS -->
 [inklewriter.com]: inklewriter.com
+[issues]: https://github.com/BluestoneDE/InkleWriterImporter/issues
 [download-link]: https://github.com/BluestoneDE/InkleWriterImporter/releases/latest/download/InkleWriterImporter.jar
