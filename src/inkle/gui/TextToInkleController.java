@@ -36,7 +36,7 @@ public class TextToInkleController {
         // drag and drop text files
         rootPane.setOnDragOver(event -> {
             if (event.getGestureSource() != rootPane && event.getDragboard().hasFiles())
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                event.acceptTransferModes(copyMode ? TransferMode.NONE : TransferMode.COPY_OR_MOVE);
             event.consume();
         });
         rootPane.setOnDragDropped(event -> {
@@ -91,8 +91,9 @@ public class TextToInkleController {
             text = textArea.getText();
             if (text.length() == 0 || text.startsWith("{")) return;
 
-            boolean inky_format = text.indexOf("inky format") > 0;
-            String JsonText = inky_format ? convertInkyFormat(text) : convertOwnFormat(text);
+            int inky_format = text.indexOf("// inky format");
+            Stitch.keyList.clear();
+            String JsonText = (0 < inky_format && inky_format < 100) ? convertInkyFormat(text) : convertOwnFormat(text);
             if (JsonText == null) return;
             textArea.setText(JsonText);
             button.setText("go back");
