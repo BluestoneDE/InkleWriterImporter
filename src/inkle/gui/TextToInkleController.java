@@ -12,8 +12,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -46,10 +46,10 @@ public class TextToInkleController {
                 try {
                     Path file = db.getFiles().get(0).toPath();
                     if (file.toString().endsWith(".ink") || Files.probeContentType(file).startsWith("text")) {
-                        InputStream is = new BufferedInputStream(Files.newInputStream(file));
-                        int i;
+                        BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8);
                         StringBuilder fullText = new StringBuilder();
-                        while ((i = is.read()) != -1)
+                        int i;
+                        while ((i = reader.read()) != -1)
                             fullText.append((char) i);
                         textArea.setText(fullText.toString());
                         success = true;
@@ -108,6 +108,7 @@ public class TextToInkleController {
 
         // split text by line-breaks
         ArrayList<String> lines = new ArrayList<>(Arrays.asList(text.split("\n")));
+        lines.replaceAll(s -> s.replaceAll("<>", "")); // inky format has these for some reason
         lines.replaceAll(String::trim); // trim all lines
         lines.removeIf(line -> line.length() == 0 || line.startsWith("//")); // remove empty lines and comments
 
