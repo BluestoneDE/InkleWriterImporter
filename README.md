@@ -34,6 +34,6 @@
 
 
 <!-- LINKS -->
-[inklewriter.com]: inklewriter.com
+[inklewriter.com]: https://inklewriter.com
 [issues]: https://github.com/BluestoneDE/InkleWriterImporter/issues
 [download-link]: https://github.com/BluestoneDE/InkleWriterImporter/releases/latest/download/InkleWriterImporter.jar
