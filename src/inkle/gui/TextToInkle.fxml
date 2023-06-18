@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            style="-fx-background-color: #444;" stylesheets="/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="inkle.gui.TextToInkleController">
+    <GridPane hgap="10.0" vgap="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+              AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" prefWidth="420.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints prefHeight="40.0"/>
+            <RowConstraints prefHeight="200.0" vgrow="ALWAYS"/>
+            <RowConstraints prefHeight="40.0"/>
+        </rowConstraints>
+        <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#selectAll" wrapText="true"
+                  GridPane.columnSpan="2147483647" GridPane.rowIndex="1"/>
+        <ImageView disable="true" opacity="0.02" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER"
+                   GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <Image url="@../../inkle.png"/>
+        </ImageView>
+        <Label alignment="CENTER" contentDisplay="RIGHT" styleClass="title" text="Text to Inkle Writer Importer"
+               textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+            <graphic>
+                <Label text="v0.4" textFill="WHITE"/>
+            </graphic>
+        </Label>
+        <Button fx:id="button" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                mnemonicParsing="false" onAction="#convert" text="convert" GridPane.rowIndex="2"/>
+    </GridPane>
+</AnchorPane>

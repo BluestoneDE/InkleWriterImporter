@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'Titillium Web';
+    src: url('/TitilliumWeb-Bold.ttf');
+}
+
+.title, .label, .check-box, .button, .text-field, .list-view{
+    -fx-font-family: 'Titillium Web';
+}
+
+.label, .check-box, .button, .text-field {
+    -fx-font-size: 20;
+    -fx-padding: 0;
+}
+.title {
+    -fx-font-size: 27;
+    -fx-margin: 0 -10;
+}
+.text-area, .list-view, .text-field {
+    -fx-control-inner-background: #222;
+}
+.list-view {
+    -fx-font-size: 14;
+}
+.text-field {
+    -fx-margin-left: 10;
+}
+.slider {
+    -fx-padding: 0 -4;
+}
+.button, .check-box .box {
+    -fx-background-insets: 0;
+}
