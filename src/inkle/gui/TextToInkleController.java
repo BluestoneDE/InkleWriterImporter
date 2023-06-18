@@ -7,12 +7,12 @@ import inkle.json.Story;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,44 +40,13 @@ public class TextToInkleController {
             event.consume();
         });
         rootPane.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (!copyMode && db.hasFiles()) {
-                try {
-                    Path file = db.getFiles().get(0).toPath();
-                    if (file.toString().endsWith(".ink") || Files.probeContentType(file).startsWith("text")) {
-                        BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8);
-                        StringBuilder fullText = new StringBuilder();
-                        int i;
-                        while ((i = reader.read()) != -1)
-                            fullText.append((char) i);
-                        textArea.setText(fullText.toString());
-                        success = true;
-                    }
-                } catch (Exception ignored) {
-                }
-            }
-            event.setDropCompleted(success);
+            event.setDropCompleted(loadFile(event.getDragboard().getFiles().get(0)));
             event.consume();
         });
 
         // configure text area and fill with default text
         textArea.setFont(Font.font("Consolas Bold", 18));
-        textArea.setText("Stanley's Doors | the narrator\n\n" +
-                "This is the story of a man named Stanley. " +
-                "Stanley worked for a company in a big building where he was Employee Number 427. " +
-                "One day he got up from his desk, and stepped out of his office. \n" +
-                "When Stanley came to a set of two open doors, he entered the door on his left.\n" +
-                "* enter the left door\n" +
-                "\tStanley entered the left door like he was told.\n" +
-                "* enter the right door\n" +
-                "\tStanley ignored the narrator and entered the wrong door.\n" +
-                "* do nothing\n" +
-                "What happened next?\n" +
-                "* end the story\n" +
-                "* end the story but different\n" +
-                "\tSomething was different and Stanley could feel it.\n" +
-                "The story Ended!\n");
+        loadFile(new File("src/example.txt"));
     }
 
     @FXML
@@ -286,6 +255,25 @@ public class TextToInkleController {
         story.data.setInitial(initialStitchKey);
         story.data.editorData.setPlayPoint(initialStitchKey);
         return new GsonBuilder().serializeNulls().create().toJson(story);
+    }
+
+    private boolean loadFile(File file) {
+        if (copyMode || file == null) return false;
+        boolean success = false;
+        try {
+            Path path = file.toPath();
+            if (file.toString().endsWith(".ink") || Files.probeContentType(path).startsWith("text")) {
+                BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+                StringBuilder fullText = new StringBuilder();
+                int i;
+                while ((i = reader.read()) != -1)
+                    fullText.append((char) i);
+                textArea.setText(fullText.toString());
+                success = true;
+            }
+        } catch (Exception ignored) {
+        }
+        return success;
     }
 
     @FXML

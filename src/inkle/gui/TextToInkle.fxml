@@ -27,7 +27,7 @@
         <Label alignment="CENTER" contentDisplay="RIGHT" styleClass="title" text="Text to Inkle Writer Importer"
                textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
             <graphic>
-                <Label text="v0.7" textFill="WHITE"/>
+                <Label text="v0.8" textFill="WHITE"/>
             </graphic>
         </Label>
         <Button fx:id="button" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"

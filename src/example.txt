@@ -1,0 +1,14 @@
+Stanley's Doors | the narrator
+
+This is the story of a man named Stanley. Stanley worked for a company in a big building where he was Employee Number 427. One day he got up from his desk, and stepped out of his office.
+When Stanley came to a set of two open doors, he entered the door on his left.
+* enter the left door
+	Stanley entered the left door like he was told.
+* enter the right door
+	Stanley ignored the narrator and entered the wrong door.
+* do nothing
+What happened next?
+* end the story
+* end the story but different
+	Something was different and Stanley could feel it.
+The story Ended!
