@@ -42,7 +42,7 @@ public class TextToInkleController {
         rootPane.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
-            if (db.hasFiles()) {
+            if (!copyMode && db.hasFiles()) {
                 try {
                     Path file = db.getFiles().get(0).toPath();
                     if (file.toString().endsWith(".ink") || Files.probeContentType(file).startsWith("text")) {
