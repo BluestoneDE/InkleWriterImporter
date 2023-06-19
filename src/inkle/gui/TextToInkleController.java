@@ -1,6 +1,7 @@
 package inkle.gui;
 
 import com.google.gson.GsonBuilder;
+import inkle.Main;
 import inkle.json.Option;
 import inkle.json.Stitch;
 import inkle.json.Story;
@@ -13,11 +14,13 @@ import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +49,13 @@ public class TextToInkleController {
 
         // configure text area and fill with default text
         textArea.setFont(Font.font("Consolas Bold", 18));
-        loadFile(new File("src/example.txt"));
+        try {
+            File file = new File(Main.class.getResource("/example.txt").toURI());
+            System.out.println(file.toURL());
+            loadFile(file);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @FXML

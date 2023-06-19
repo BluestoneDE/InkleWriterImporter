@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="InkleWriterImporter">
-    <output-path>$PROJECT_DIR$/out/artifacts/InkleWriterImporter</output-path>
+    <output-path>$PROJECT_DIR$/out</output-path>
     <root id="archive" name="InkleWriterImporter.jar">
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
