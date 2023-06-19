@@ -29,7 +29,7 @@
     3. Click on **import story**
     4. Click **open**
     5. Your imported story should appear in the list
-5. The **go back** button turns the text back into what you put it disables copy mode
+5. The **go back** button turns the text back into what you put in and disables copy mode
     - you cannot edit or import stories while the app is in copy mode
 
 

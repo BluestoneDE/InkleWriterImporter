@@ -1,7 +1,6 @@
 package inkle.gui;
 
 import com.google.gson.GsonBuilder;
-import inkle.Main;
 import inkle.json.Option;
 import inkle.json.Stitch;
 import inkle.json.Story;
@@ -14,13 +13,11 @@ import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,13 +46,7 @@ public class TextToInkleController {
 
         // configure text area and fill with default text
         textArea.setFont(Font.font("Consolas Bold", 18));
-        try {
-            File file = new File(Main.class.getResource("/example.txt").toURI());
-            System.out.println(file.toURL());
-            loadFile(file);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        textArea.setText("Stanley's Doors | the narrator\n\n" + "This is the story of a man named Stanley. " + "Stanley worked for a company in a big building where he was Employee Number 427. " + "One day he got up from his desk, and stepped out of his office. \n" + "When Stanley came to a set of two open doors, he entered the door on his left.\n" + "* enter the left door\n" + "\tStanley entered the left door like he was told.\n" + "* enter the right door\n" + "\tStanley ignored the narrator and entered the wrong door.\n" + "* do nothing\n" + "What happened next?\n" + "* end the story\n" + "* end the story but different\n" + "\tSomething was different and Stanley could feel it.\n" + "The story Ended!\n");
     }
 
     @FXML
@@ -69,9 +60,13 @@ public class TextToInkleController {
             text = textArea.getText();
             if (text.length() == 0 || text.startsWith("{")) return;
 
-            int inky_format = text.indexOf("// inky format");
+            // clear keys and decide on format
             Stitch.keyList.clear();
-            String JsonText = (0 < inky_format && inky_format < 100) ? convertInkyFormat(text) : convertOwnFormat(text);
+            int author = text.indexOf("# author: ");
+            // it's inky if first comment is the title and author can be found within first 1000 positions
+            boolean inky_format = text.split("\n", 2)[0].matches("^// -+ .* ----") &&
+                    0 < author && author < 1000;
+            String JsonText = inky_format ? convertInkyFormat(text) : convertOwnFormat(text);
             if (JsonText == null) return;
             textArea.setText(JsonText);
             button.setText("go back");
@@ -87,8 +82,9 @@ public class TextToInkleController {
         // split text by line-breaks
         ArrayList<String> lines = new ArrayList<>(Arrays.asList(text.split("\n")));
         lines.replaceAll(s -> s.replaceAll("<>", "")); // inky format has these for some reason
-        lines.replaceAll(String::trim); // trim all lines
-        lines.removeIf(line -> line.length() == 0 || line.startsWith("//")); // remove empty lines and comments
+        lines.replaceAll(String::trim);
+        // remove empty lines and comments and todos
+        lines.removeIf(line -> line.length() == 0 || line.startsWith("//") || line.startsWith("TODO:"));
 
         // set author and title
         if (lines.get(1).startsWith("# author: ")) {
@@ -96,15 +92,16 @@ public class TextToInkleController {
             lines.remove(1);
         }
         if (lines.get(0).startsWith("# ")) {
-            story.setTitle(lines.get(0).substring(2));
+            String title = lines.get(0).substring(2);
+            if (title.startsWith("title: ")) title = title.substring(7);
+            story.setTitle(title);
             lines.remove(0);
         }
 
         // the first direct should be initial
         if (lines.get(0).startsWith("-> ")) {
             String initial = lines.get(0).substring(3);
-            if (initial.length() > Stitch.keyLength)
-                initial = initial.substring(0, Stitch.keyLength);
+            if (initial.length() > Stitch.keyLength) initial = initial.substring(0, Stitch.keyLength);
             story.data.setInitial(initial);
             story.data.editorData.setPlayPoint(initial);
             lines.remove(0);
@@ -127,8 +124,7 @@ public class TextToInkleController {
                         currentStitch.setKeyOnce(key);
                         continue;
                     }
-                    if (currentStitch.hasKey())
-                        story.data.addStitch(currentStitch);
+                    if (currentStitch.hasKey()) story.data.addStitch(currentStitch);
                     currentStitch = new Stitch();
                     currentStitch.setKeyOnce(key);
                     continue;
@@ -275,8 +271,7 @@ public class TextToInkleController {
                 BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
                 StringBuilder fullText = new StringBuilder();
                 int i;
-                while ((i = reader.read()) != -1)
-                    fullText.append((char) i);
+                while ((i = reader.read()) != -1) fullText.append((char) i);
                 textArea.setText(fullText.toString());
                 success = true;
             }
