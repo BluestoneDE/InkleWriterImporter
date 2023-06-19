@@ -46,7 +46,21 @@ public class TextToInkleController {
 
         // configure text area and fill with default text
         textArea.setFont(Font.font("Consolas Bold", 18));
-        textArea.setText("Stanley's Doors | the narrator\n\n" + "This is the story of a man named Stanley. " + "Stanley worked for a company in a big building where he was Employee Number 427. " + "One day he got up from his desk, and stepped out of his office. \n" + "When Stanley came to a set of two open doors, he entered the door on his left.\n" + "* enter the left door\n" + "\tStanley entered the left door like he was told.\n" + "* enter the right door\n" + "\tStanley ignored the narrator and entered the wrong door.\n" + "* do nothing\n" + "What happened next?\n" + "* end the story\n" + "* end the story but different\n" + "\tSomething was different and Stanley could feel it.\n" + "The story Ended!\n");
+        textArea.setText("Stanley's Doors | the narrator\n\n" +
+                "This is the story of a man named Stanley. " +
+                "Stanley worked for a company in a big building where he was Employee Number 427. " +
+                "One day he got up from his desk, and stepped out of his office. \n" +
+                "When Stanley came to a set of two open doors, he entered the door on his left.\n" +
+                "* enter the left door\n" +
+                "\tStanley entered the left door like he was told.\n" +
+                "* enter the right door\n" +
+                "\tStanley ignored the narrator and entered the wrong door.\n" +
+                "* do nothing\n" +
+                "What happened next?\n" +
+                "* end the story\n" +
+                "* end the story but different\n" +
+                "\tSomething was different and Stanley could feel it.\n" +
+                "The story Ended!\n");
     }
 
     @FXML
@@ -63,10 +77,10 @@ public class TextToInkleController {
             // clear keys and decide on format
             Stitch.keyList.clear();
             int author = text.indexOf("# author: ");
-            // it's inky if first comment is the title and author can be found within first 1000 positions
-            boolean inky_format = text.split("\n", 2)[0].matches("^// -+ .* ----") &&
+            // it's ink if first comment is the title and author can be found within first 1000 positions
+            boolean ink_format = text.split("\n", 2)[0].matches("^// -+ .* ----") &&
                     0 < author && author < 1000;
-            String JsonText = inky_format ? convertInkyFormat(text) : convertOwnFormat(text);
+            String JsonText = ink_format ? convertInkFormat(text) : convertOwnFormat(text);
             if (JsonText == null) return;
             textArea.setText(JsonText);
             button.setText("go back");
@@ -76,12 +90,12 @@ public class TextToInkleController {
         selectAll();
     }
 
-    private String convertInkyFormat(String text) {
+    private String convertInkFormat(String text) {
         Story story = new Story();
 
         // split text by line-breaks
         ArrayList<String> lines = new ArrayList<>(Arrays.asList(text.split("\n")));
-        lines.replaceAll(s -> s.replaceAll("<>", "")); // inky format has these for some reason
+        lines.replaceAll(s -> s.replaceAll("<>", "")); // ink format has these for some reason
         lines.replaceAll(String::trim);
         // remove empty lines and comments and todos
         lines.removeIf(line -> line.length() == 0 || line.startsWith("//") || line.startsWith("TODO:"));
