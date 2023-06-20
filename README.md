@@ -1,5 +1,5 @@
 <!-- TITLE -->
-<h2 align="center">A JavaFX Application that converts text/ink into IinkleWriter JSON</h2>
+<h2 align="center">A JavaFX Application that converts text/ink into InkleWriter JSON</h2>
 <div align="center">
 
 [![Download](https://img.shields.io/github/downloads/BluestoneDE/InkleWriterImporter/total.svg?style=for-the-badge&label=download&color=green&logo=DocuSign&logoColor=white)][download-link]

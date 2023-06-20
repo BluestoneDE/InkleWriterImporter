@@ -53,6 +53,7 @@ public class TextToInkleController {
                 "When Stanley came to a set of two open doors, he entered the door on his left.\n" +
                 "* enter the left door\n" +
                 "\tStanley entered the left door like he was told.\n" +
+                "\tGood boy Stanley\n" +
                 "* enter the right door\n" +
                 "\tStanley ignored the narrator and entered the wrong door.\n" +
                 "* do nothing\n" +
@@ -198,6 +199,8 @@ public class TextToInkleController {
         Story story = new Story(title[0]);
         lines.remove(0);
         if (title.length > 1) story.data.editorData.setAuthorName(title[1]);
+        // remove empty lines and comments and todos
+        lines.removeIf(line -> line.length() == 0 || line.startsWith("//"));
 
         // early abort
         if (lines.size() == 0) return null;
@@ -208,8 +211,7 @@ public class TextToInkleController {
         ArrayList<Option> unlinkedOptions = new ArrayList<>();
         ArrayList<Stitch> responseStitches = new ArrayList<>();
         for (String line : lines) {
-            if (line.length() == 0 || line.startsWith("//")) continue; // skip empty lines and comments
-
+            System.out.println(line);
             // add initial stitch
             if (currentStitch == null) {
                 currentStitch = new Stitch(line);
@@ -223,9 +225,7 @@ public class TextToInkleController {
 
             if ((line.startsWith("*") || line.startsWith("-")) && currentStitch.content.size() > 0) {
                 // it's an option
-                String option = line.substring(1);
-                if (option.length() == 0) continue;
-                if (option.startsWith(" ")) option = option.substring(1);
+                String option = line.substring(1).trim();
                 if (option.length() == 0) continue;
                 Option newOption = new Option(option);
                 unlinkedOptions.add(newOption);
@@ -233,16 +233,19 @@ public class TextToInkleController {
                 continue;
             }
 
-            if (line.startsWith("\t") && !unlinkedOptions.isEmpty()) {
-                // it's a response to a previous option
-                String response = line.substring(1);
-                if (response.length() == 0) continue;
-                if (response.startsWith(" ")) response = response.substring(1);
+            if (line.startsWith("\t")) {
+                String response = line.substring(1).trim();
                 if (response.length() == 0) continue;
                 Stitch responseStitch = new Stitch(response);
-                int optionIndex = unlinkedOptions.size() - 1;
-                unlinkedOptions.get(optionIndex).setLinkPath(responseStitch.getKey());
-                unlinkedOptions.remove(optionIndex);
+                if (!unlinkedOptions.isEmpty()) {
+                    // it's a response to a previous option
+                    int optionIndex = unlinkedOptions.size() - 1;
+                    unlinkedOptions.get(optionIndex).setLinkPath(responseStitch.getKey());
+                    unlinkedOptions.remove(optionIndex);
+                } else {
+                    // it's a response to the previous response
+                    responseStitches.get(responseStitches.size()-1).addDivert(responseStitch.getKey());
+                }
                 story.data.addStitch(responseStitch);
                 responseStitches.add(responseStitch);
                 continue;
@@ -256,16 +259,15 @@ public class TextToInkleController {
             if (!previousStitch.hasDivert() && !previousStitch.hasOptions())
                 previousStitch.addDivert(currentStitch.getKey());
             // link up responses and unlinked options to new stitch
+            responseStitches.removeIf(Stitch::hasDivert);
             for (Stitch response : responseStitches) response.addDivert(currentStitch.getKey());
             responseStitches.clear();
             for (Option option : unlinkedOptions) option.setLinkPath(currentStitch.getKey());
             unlinkedOptions.clear();
         }
-        if (currentStitch != null) {
-            story.data.addStitch(currentStitch);
-            for (Option option : unlinkedOptions) option.setLinkPath(currentStitch.getKey());
-            unlinkedOptions.clear();
-        }
+        story.data.addStitch(currentStitch);
+        for (Option option : unlinkedOptions) option.setLinkPath(currentStitch.getKey());
+        unlinkedOptions.clear();
         // abort if there are no stitches
         if (story.data.stitches.size() == 0) return null;
 
